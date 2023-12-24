@@ -61,7 +61,7 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
         panic(err)
     }
 
-    shortId = shortId[:4]
+    shortId = shortId[:5]
     url = "https://" + url
     
     err = rdb.Set(db.Ctx, shortId, url, 24 * time.Hour).Err()
