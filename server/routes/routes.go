@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
+    "github.com/teris-io/shortid"
 	"github.com/auseini/url-shortener/server/db"
 )
 
@@ -50,13 +50,26 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
 
     rdb := db.CreateDbClient()
 
-    
-    err = rdb.Set(db.Ctx, "shortId", url, 24 * time.Hour).Err()
+    sid, err := shortid.New(1, shortid.DefaultABC, 2342)
     if err != nil {
         panic(err)
     }
 
-    fmt.Fprintf(w, "%s", url) 
+    shortId, err := sid.Generate()
+
+    if err != nil {
+        panic(err)
+    }
+
+    shortId = shortId[:4]
+    url = "https://" + url
+    
+    err = rdb.Set(db.Ctx, shortId, url, 24 * time.Hour).Err()
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Fprintf(w, "%s", shortId) 
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
@@ -73,6 +86,6 @@ func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
     }
 
 
-    http.Redirect(w, r, "https://" + val, http.StatusSeeOther)
+    http.Redirect(w, r, val, http.StatusSeeOther)
 
 }
