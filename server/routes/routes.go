@@ -1,10 +1,16 @@
 package routes 
 
 import (
+    "encoding/json"
     "strings"
     "fmt"
     "net/http"
 )
+
+
+type ShortenRequest struct {
+    Url string
+}
 
 func HomeHandler(w http.ResponseWriter, r *http.Request){
     shortId := strings.TrimPrefix(r.URL.Path, "/")
@@ -19,7 +25,25 @@ func HomeHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func ShortenHandler(w http.ResponseWriter, r *http.Request){
-    fmt.Fprintln(w, "comingin from routes, %s", r.URL.Path[1:])
+
+    method := r.Method
+
+    if method != "POST" {
+        fmt.Fprintf(w, "only POST allowed")
+        return
+    }
+
+    var request ShortenRequest
+
+    err := json.NewDecoder(r.Body).Decode(&request) 
+
+    if err != nil {
+        fmt.Fprintln(w, "Could not read body")
+        return
+    }
+
+    url := request.Url
+    fmt.Fprintf(w, "%s", url) 
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
