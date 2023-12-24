@@ -8,6 +8,7 @@ import (
 	"time"
     "github.com/teris-io/shortid"
 	"github.com/auseini/url-shortener/server/db"
+    "github.com/redis/go-redis/v9"
 )
 
 
@@ -76,7 +77,10 @@ func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
     rdb := db.CreateDbClient()
 
     val, err := rdb.Get(db.Ctx, shortId).Result()
-    if err != nil {
+    if err == redis.Nil {
+        fmt.Fprintf(w, "url not found")
+        return
+    } else if err != nil {
         panic(err)
     }
 
