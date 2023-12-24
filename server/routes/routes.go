@@ -69,7 +69,7 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
         panic(err)
     }
 
-    fmt.Fprintf(w, "%s", shortId) 
+    fmt.Fprintf(w, "%s", "localhost:8080/" + shortId) 
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
