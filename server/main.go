@@ -3,7 +3,7 @@ package main
 import (
     "log"
     "net/http"
-    "urlshortener/server/routes"
+    "github.com/auseini/url-shortener/server/routes"
 )
 
 func main(){
