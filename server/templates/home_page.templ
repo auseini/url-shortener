@@ -20,4 +20,11 @@ templ HomePage(){
                 @content()
             </body>
         </html>
-    }
+}
+
+templ Link(url string) {
+    <div>
+       <label for="url">Shortened Link</label>
+       <div id="url">{url}</div>
+    </div>
+}

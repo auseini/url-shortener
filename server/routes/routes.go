@@ -61,7 +61,9 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
         panic(err)
     }
 
-    fmt.Fprintf(w, "%s", "localhost:8080/" + shortId) 
+
+    templates.Link("http://localhost:8080/" + shortId).Render(r.Context(), w)
+//    fmt.Fprintf(w, "%s", "localhost:8080/" + shortId) 
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
