@@ -6,8 +6,6 @@ import (
     "github.com/auseini/url-shortener/server/routes"
 )
 
-
-
 func main(){
     http.HandleFunc("/", routes.HomeHandler)
     http.HandleFunc("/shorten",routes.ShortenHandler)

@@ -9,6 +9,7 @@ import (
     "github.com/teris-io/shortid"
 	"github.com/auseini/url-shortener/server/db"
     "github.com/redis/go-redis/v9"
+    "github.com/auseini/url-shortener/server/templates"
 )
 
 
@@ -22,10 +23,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request){
     if shortId != "" {
         redirectHandler(w, r, shortId)
     } else{
-        fmt.Fprintf(w, "will render some html here")
+        templates.Hello("who asked").Render(r.Context(), w) 
     }
-
-
 }
 
 func ShortenHandler(w http.ResponseWriter, r *http.Request){
