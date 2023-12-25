@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -13,17 +12,13 @@ import (
 )
 
 
-type ShortenRequest struct {
-    Url string
-}
-
 func HomeHandler(w http.ResponseWriter, r *http.Request){
     shortId := strings.TrimPrefix(r.URL.Path, "/")
 
     if shortId != "" {
         redirectHandler(w, r, shortId)
     } else{
-        templates.Hello("who asked").Render(r.Context(), w) 
+        templates.HomePage().Render(r.Context(), w) 
     }
 }
 
@@ -36,16 +31,11 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
         return
     }
 
-    var request ShortenRequest
-
-    err := json.NewDecoder(r.Body).Decode(&request) 
-
-    if err != nil {
-        fmt.Fprintln(w, "Could not read body")
+    url := r.FormValue("url") 
+    if url == "" {
+        fmt.Fprintf(w,"no link recieved")
         return
     }
-
-    url := request.Url
 
 
     rdb := db.CreateDbClient()
@@ -62,7 +52,9 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
     }
 
     shortId = shortId[:5]
-    url = "https://" + url
+    if url[:8] != "https://" {
+        url = "https://" + url
+    }
     
     err = rdb.Set(db.Ctx, shortId, url, 24 * time.Hour).Err()
     if err != nil {
