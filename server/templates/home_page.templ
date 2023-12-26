@@ -3,28 +3,33 @@ package templates
 templ header() {
         <head>
 			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+            <script src="https://cdn.tailwindcss.com"></script>
         </head>
 }
 
 templ content() {
         <form hx-post="/shorten" hx-target="body" hx-trigger="submit">
-            <input id="url" name="url" type="text"/>
-            <button type="submit">Submit</button>
+            <input class="border-2" id="url" name="url" type="text" placeholder="Enter your url"/>
+            <button class="border-2 bg-white" type="submit">Submit</button>
         </form>
     }
 
 templ HomePage(){
         <html>
             @header()
-            <body>
+            <body class="flex justify-center h-screen bg-black">
                 @content()
             </body>
         </html>
 }
 
+script copyText(url string){
+        navigator.clipboard.writeText(url)
+}
+
 templ Link(url string) {
-    <div>
-       <label for="url">Shortened Link</label>
-       <div id="url">{url}</div>
+    <div class="flex justify-between h-fit">
+       <div id="url" class="text-white">{url}</div>
+       <button class="border-2 bg-white" type="button" onclick={copyText(url)}>Copy</button>
     </div>
 }
