@@ -17,7 +17,7 @@ templ content() {
 templ HomePage(){
         <html>
             @header()
-            <body class="flex justify-center h-screen bg-black">
+            <body class="flex justify-center h-screen bg-zinc-800">
                 @content()
             </body>
         </html>
@@ -29,7 +29,7 @@ script copyText(url string){
 
 templ Link(url string) {
     <div class="flex justify-between h-fit">
-       <div id="url" class="text-white">{url}</div>
+       <div id="url" class="text-black bg-white border-2 mr-1">{url}</div>
        <button class="border-2 bg-white" type="button" onclick={copyText(url)}>Copy</button>
     </div>
 }
