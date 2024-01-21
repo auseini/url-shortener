@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM golang:1.21-alpine AS base
 
 WORKDIR /app
 
@@ -10,8 +10,13 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o shortener ./server 
 
+RUN chmod +x ./shortener
+
 EXPOSE 8080
 
-RUN chmod +x ./shortener
+FROM scratch
+
+COPY --from=base /app/shortener .
+
 
 CMD ["./shortener"]

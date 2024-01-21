@@ -10,6 +10,7 @@ services:
       REDIS_HOST: db
       REDIS_PASS: password
       REDIS_PORT: 6379
+      REDIRECT_URL: http://localhost:8080/
   db:
     image: redis
     restart: always

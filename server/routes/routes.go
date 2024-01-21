@@ -3,12 +3,14 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
-    "github.com/teris-io/shortid"
+
 	"github.com/auseini/url-shortener/server/db"
-    "github.com/redis/go-redis/v9"
-    "github.com/auseini/url-shortener/server/templates"
+	"github.com/auseini/url-shortener/server/templates"
+	"github.com/redis/go-redis/v9"
+	"github.com/teris-io/shortid"
 )
 
 
@@ -61,9 +63,8 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request){
         panic(err)
     }
 
-
-    templates.Link("http://localhost:8080/" + shortId).Render(r.Context(), w)
-//    fmt.Fprintf(w, "%s", "localhost:8080/" + shortId) 
+    redirectUrl := os.Getenv("REDIRECT_URL")
+    templates.Link(redirectUrl + shortId).Render(r.Context(), w)
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortId string){
